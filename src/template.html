@@ -5,20 +5,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>To-Do-List</title>
     <link id="icon" rel="icon" href ="./images/icon.png">
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="header">
         <div class="title">Todo.io</div>
-        <button id="toggleTheme">Toggle Theme</button>
+        <button id="toggleTheme">🌙 Toggle Theme</button>
+        <button id="mute">🔊🔇</button>
+        <button id="login">Log In</button>
     </div>
     <div class="main">
         <div class = "left">
-            <button class="Home">Home</button>
-            <button class="Today">Today</button>
-            <button class="Tomorrow">Tomorrow</button>
-            <button class="Week">Week</button>
-            <div class="Project">Projects
-                <div class="container">
+            <button class="Home selected">Home <strong>0</strong></button>
+            <button class="Today">Today <strong>0</strong></button>
+            <button class="Tomorrow">Tomorrow <strong>0</strong></button>
+            <button class="Week">Week <strong>4</strong></button>
+            <div class="proj">Projects <strong></strong></div>
+            <div class="Project">
+                <div class="container selected">
                     <button class="Gym">Gym</button>
                     <div class="num">4</div>
                 </div>
