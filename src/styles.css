@@ -1,0 +1,408 @@
+@font-face {
+  font-family: 'cubic';
+  src: url('fonts/cubic.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'blackflag';
+  src: url('fonts/BlackFlag.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'walt';
+  src: url('fonts/waltographUI.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'hanging';
+  src: url('fonts/Hanged\ Letters.ttf') format('truetype');
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  
+  display: grid;
+  grid-template-rows: 0.25fr 3fr 0.25fr;
+  height: 100vh;
+  overflow: auto;
+  background: linear-gradient(120deg, #a1c4fd, #c2e9fb);
+  transition: background 0.5s ease, color 0.3s ease;
+  transition: color 2s ease, box-shadow 0.3s ease;
+}
+
+
+body.dark{
+    background: linear-gradient(120deg, #000000, #646464);
+}
+
+.header {
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(99px);
+  color: #222;
+  padding: 1px 1px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  margin: 1rem;
+  transition: color 2s ease, box-shadow 0.3s ease;
+}
+
+.header.dark{
+    background: rgba(255, 255, 255, 0.2);
+    color: #a2a2a2;
+    box-shadow: 0 4px 15px rgba(255, 255, 255, 0.1);
+}
+
+.header .title{
+    font-family: cubic;
+    font-size: 4rem;
+    margin-left: 10vh;
+}
+
+.header button{
+    margin-right: 10vh;
+    width: 12.5rem;
+    height: 2.75rem;
+    font-size: 1rem;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 1;
+    background: transparent;
+    border: 0;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.18); 
+    font-family: walt;
+    cursor: pointer;
+    transition: color 2s ease, transform 0.5s ease, cursor 0.2s ease,box-shadow 0.3s ease;
+}
+
+.header.dark #toggleTheme{
+    box-shadow: 0 4px 16px rgba(255, 255, 255, 0.18); 
+    color: white;
+}
+
+.header button:hover {
+  transform: scale(1.05);    
+}
+.header button:active {
+  transform: scale(0.98); 
+  transition: transform 2.5s ease-in, transform 2.5s ease-out;
+  cursor: wait; 
+
+}
+.header button:focus {
+  outline: none;
+}
+
+
+.main{
+    display: flex;
+    flex-direction: column;
+}
+
+.main .add{
+    align-self: center;
+    background: none;
+    font-family: hanging;
+    margin-top: 2rem;
+    font-size: 5vh;
+    border:0px;
+    margin-bottom: 5vh;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.18); 
+    cursor: pointer;
+    transition: color 2s ease, transform 0.5s ease, cursor 0.2s ease,box-shadow 0.3s ease;
+}
+
+.main .add.dark{
+    box-shadow: 0 4px 16px rgba(255, 255, 255, 0.18); 
+    color: white;
+}
+
+.main button:hover {
+  transform: scale(1.05);    
+}
+.main button:active {
+  transform: scale(0.98); 
+  transition: transform 2.5s ease-in, transform 2.5s ease-out;
+  cursor: wait; 
+
+}
+.main button:focus {
+  outline: none;
+}
+
+.modal {
+  display: none; 
+  position: fixed; 
+  z-index: 1; 
+  left: 0;
+  top: 0;
+  width: 100%; 
+  height: 100%; 
+  overflow: hidden; 
+  background-color: rgba(0,0,0,0.4); 
+  transition: background-color 2s ease; 
+}
+
+.modal.dark{
+    background-color: rgba(255, 255, 255, 0.4);
+}
+
+.modal-title{
+    font-family: walt;
+    font-size: 5vh;
+}
+.modal-content {
+  background-color: none;
+  margin: 15% auto; 
+  padding: 20px;
+  width: 80%; 
+  max-width: 500px; 
+  position: relative; 
+}
+
+.close-button {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+  position: absolute; 
+  top: 10px;
+  right: 15px;
+  transition: transform 1s ease-in;
+  transition: color 2s ease, box-shadow 0.3s ease;
+}
+
+.close-button.dark{
+    color: rgb(82, 81, 81);
+}
+
+.close-button:hover,
+.close-button:focus {
+  text-decoration: none;
+  cursor: pointer;
+  transform: scale(1.1);
+}
+
+form{
+    align-self: center;
+    padding-left: 5vh;
+    font-size: 1.5vh;
+    font-family: badbrush;
+    box-shadow: 
+    5px 0 5px -2px rgba(0,0,0,0.5),   /* right */
+   -5px 0 5px -2px rgba(0,0,0,0.5),   /* left */
+    0 5px 5px -2px rgba(0,0,0,0.5),   /* bottom */
+    0 -5px 5px -2px rgba(0,0,0,0.5);
+    width: 60vh;
+}
+
+.form{
+    transition: color 2s ease, box-shadow 0.3s ease;
+}
+
+.form.dark{
+    box-shadow: 
+    5px 0 5px -2px rgba(255, 255, 255, 0.5),   /* right */
+   -5px 0 5px -2px rgba(255, 255, 255, 0.5),   /* left */
+    0 5px 5px -2px rgba(255, 255, 255, 0.5),   /* bottom */
+    0 -5px 5px -2px rgba(255, 255, 255, 0.5);
+}
+
+.container input{
+    padding-bottom: 1vh;
+    padding-left: 0.25vh;
+    width: 50vh;
+    font-family: 'Courier New', Courier, monospace;
+    font-style: italic;
+}
+
+.container label[for="checkbox"]
+{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 1vh;
+    gap: 0.5rem;
+}
+
+.container label[for="checkbox"] input{
+    width: min(2vh, 100px);
+}
+
+.container input::placeholder{
+  font-family: "Courier New", monospace; /* change font */
+  font-size: 14px;                       /* change size */
+  color: #888;                           /* change color */
+  font-style: italic;                    /* optional */
+}
+
+.container.dark input::placeholder
+{
+    color: #fffefe; 
+}
+
+.text{
+    text-align: center;
+    font-family: blackflag;
+    font-size: 1.5vh;
+}
+
+.btn button{
+    margin-top: 2vh;
+    margin-bottom: 3vh;
+    margin-left: 12vh;
+    width: 12.5rem;
+    height: 2.75rem;
+    font-size: 1rem;
+    background: rgba(8, 8, 8, 0.618);
+    color: rgb(127, 235, 233);
+    border: 0;
+    box-shadow: 0 8px 16px rgba(255, 255, 255, 0.18); 
+    font-family: cubic;
+    cursor: pointer;
+    transition: color 2s ease, transform 2s ease, cursor 0.2s ease,box-shadow 1.2s ease;
+}
+
+.btn.dark button{
+    background: rgba(255, 255, 255, 0.618);
+    color: rgb(0, 0, 0);
+    border: 0;
+    box-shadow: 0 8px 16px rgba(255, 255, 255, 0.18); 
+}
+
+button:hover {
+  transform: scale(1.1);    
+}
+
+button:active{
+  transform: scale(0.98); 
+  transition: transform 1.25s ease-in, transform 1.25s ease-out;
+  cursor: wait; 
+}
+
+.main .bookgrid{
+    display: flex;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.main .book{
+    position: relative;
+    overflow-x:auto;
+    overflow-y:hidden;
+    margin-top: 2vh;
+    background-color: rgb(199, 226, 250);
+    padding: 1vh;
+    box-shadow: 0 4px 10px rgba(255, 0, 0, 0.237);
+    width: clamp(220px,320px,20vh);
+    text-align: center;
+    font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif
+}
+
+.main .book h2{
+    font-size: 1.5rem;
+    font-family: cubic;
+}
+
+.main .book strong{
+    font-family: walt;
+}
+
+.main .book .check{
+    position: absolute;
+    top: 5%;
+    right: 5%;
+    font-size: 2.5vh;
+}
+
+.main .book .closer{
+    position: absolute;
+    top: 5%;
+    left: 5%;
+    font-size: 2.5vh;
+    background-color: transparent;
+    border: 0px;
+    box-shadow: 0 4px 10px rgba(248, 0, 0, 0.307);
+    transition: transform 1.25s ease;
+}
+
+.main .book .closer:hover, .main .book .closer:focus{
+    transform: scale(1.05);
+}
+
+body.dark .main .book .closer{
+    box-shadow: 0 4px 10px rgba(255, 255, 255, 0.5);
+}
+
+.main .book.active{
+    box-shadow: 0 4px 10px rgba(64, 255, 0, 0.307); 
+    text-decoration: line-through;
+    background-color: #6f6d6d;
+    color: whitesmoke;
+}
+
+.main .book.active .closed{
+    box-shadow: 0 4px 10px rgba(255, 255, 255, 0.5);
+}
+
+
+.footer{
+    min-height: 5rem;
+    display: flex;
+    align-items: center;
+    justify-content:center;
+}
+
+.copyright{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 0.2rem;
+}
+
+.copytext{
+    color:black;
+    font-family: walt;
+    font-size: 1.25rem;
+    transition: color 2s ease;
+}
+
+.copytext.dark{
+    color: white;
+}
+
+.github{
+    width: 2rem;
+    height: 2rem;
+    display: flex;
+    object-fit: cover;       
+    overflow: hidden;
+    justify-content: center;
+    border-radius: 50%;
+    align-items: center;
+    margin: 0px;
+    
+    
+}
+.github img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+  transition: transform 1.75s ease;
+  flex-shrink:0;
+}
+.github img:hover{
+    transform: scale(1.2) rotate(180deg);
+    transition: transform 0.3s ease-in, transform 2.5s ease-out;
+}
