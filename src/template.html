@@ -51,13 +51,117 @@
             </div>
         </div>
         <div class = "right">
-            <div class="card">
+            <div class="card high checked">
                 <input type="checkbox"  id="checkbox" value="no">
                 <div class="text">Sample event to do</div>
-                <div class="date">15th Sep</div>
-                <button class="detailes">details</button>
+                <div class="date">17th Sep</div>
+                <div class ="time">9:00</div>
+                <button class="details">details</button>
                 <button class="edit">📝</button>
                 <button class="delete">🗑️</button>
+            </div>
+        </div>
+        <div class="modal" id="addtodomodal">
+            <div class="cont">
+                <div class="addnew">
+                    <button class="addTodo selected">Add To Do</button>
+                    <button class="addProject">Add Project</button>
+                    <button class="addNote">Add Note</button>
+                </div>
+                <form action="" method="" class="form">
+                    <div class="container">
+                        <label for="title">
+                            <div class="text">Task Title:</div>
+                            <input type="text" placeholder="Title: Pay Bills"  id="title"  pattern = ".*\S.*" maxlength="20" required="required">
+                        </label>
+                    </div>
+                    <div class="container">
+                        <label for="description">
+                            <div class="text">Description:</div>
+                            <textarea placeholder="Description: Rent & Utilities" id="description"  pattern = ".*\S.*" required="required" rows="4" cols="50"></textarea>
+                        </label>
+                    </div>
+                    <div class="container">
+                        <label for="todo-date">
+                            <div class="text">Date and Time:</div>
+                            <input type="text" id="todo-date" placeholder="Select date and time" required>
+                        </label>
+                    </div>
+                    <div class="container">
+                        <label for="checkbox">
+                            <div class="text">Done?</div>
+                            <input type="checkbox"  id="checkbox" value="no">
+                        </label>
+                    </div>
+                    <div class="priority">
+                        <div class="text">Priority:</div>
+                        <button class="high selected">High</button>
+                        <button class="medium">Medium</button>
+                        <button class="low">Low</button>
+                    </div>
+                    <div class="btn">
+                        <button class="submit-btn" type="submit">Create New TO-DO</button>
+                    </div> 
+                </form>
+            </div>
+        </div>
+        <div class="modal2" id="detailsmodal">
+            <div class="heading">
+                <div class="title-text">Get that report on</div>
+                <button class="closeBtn">❌</button>
+            </div>
+            <div class="details">
+                <div class="project">
+                    <strong>Project: </strong><p></p>
+                </div>
+                <div class="description">
+                    <strong>Description:</strong><p></p>
+                </div>
+                <div class="date">
+                    <strong>Due Date and Time:</strong><p></p>
+                </div>
+                <div class="priority">
+                    <strong>Priority:</strong><p></p>
+                </div>
+            </div>
+        </div>
+         <div class="modal3" id="addtodomodal">
+            <div class="cont">
+                <form action="" method="" class="form2">
+                    <div class="container">
+                        <label for="title">
+                            <div class="text">Task Title:</div>
+                            <input type="text" placeholder="Title: Pay Bills"  id="title"  pattern = ".*\S.*" maxlength="20">
+                        </label>
+                    </div>
+                    <div class="container">
+                        <label for="description">
+                            <div class="text">Description:</div>
+                            <textarea placeholder="Description: Rent & Utilities" id="description"  pattern = ".*\S.*" rows="4" cols="50"></textarea>
+                        </label>
+                    </div>
+                    <div class="container">
+                        <label for="todo-date">
+                            <div class="text">Date and Time:</div>
+                            <input type="text" id="todo-date" placeholder="Select date and time" >
+                        </label>
+                    </div>
+                    <div class="container">
+                        <label for="checkbox">
+                            <div class="text">Done?</div>
+                            <input type="checkbox"  id="checkbox" value="no">
+                        </label>
+                    </div>
+                    <div class="priority">
+                        <div class="text">Priority:</div>
+                        <button class="high selected">High</button>
+                        <button class="medium">Medium</button>
+                        <button class="low">Low</button>
+                    </div>
+                    <div class="btn">
+                        <button class="submit-btn" type="submit">Edit TO-DO</button>
+                    </div> 
+                </form>
             </div>
         </div>
     </div>
