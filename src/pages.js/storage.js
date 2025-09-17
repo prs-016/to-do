@@ -1,4 +1,4 @@
-import Project from "./models/project.js";
+import Project from "./project.js";
 
 const STORAGE_KEY = "todo.projects.v1";
 

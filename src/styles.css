@@ -337,9 +337,9 @@ body.dark{
 }
 
 .main .right .card{
-    width: 130vh;
+    width: 150vh;
     display: grid;
-    grid-template-columns: 0.25fr 6fr 1fr 1fr 0.25fr 0.25fr;
+    grid-template-columns: 0.25fr 6fr 3fr 1fr 0.25fr 0.25fr;
     gap: 1vh;
     border: 1px solid white;
     box-shadow: 0 4px 16px rgba(255, 255, 255, 0.47);
@@ -396,7 +396,7 @@ body.dark{
 .main .right .card.checked{
     width: 150vh;
     display: grid;
-    grid-template-columns: 0.25fr 6fr 1fr 1fr 1fr 0.25fr 0.25fr;
+    grid-template-columns: 0.25fr 6fr 3fr 1fr 0.25fr 0.25fr;
     gap: 1vh;
     border: 1px solid grey;
     box-shadow: 0 4px 16px rgba(79, 79, 79, 0.47);
@@ -583,11 +583,6 @@ body.dark{
     color: #2a9d8f; 
 }
 
-.priority .high.selected{
-    border:0px;
-    color: white;
-    background-color: red;
-}
 
 .priority .high.selected{
     border:0px;
@@ -707,6 +702,15 @@ input,textarea{
   flex-direction: column;
   gap: 1.2rem;
   animation: fadeIn 0.3s ease;
+}
+
+.modal2 .details div:not(.priority){
+    display: flex;
+    gap: 1rem;
+}
+
+.modal2 .details p{
+    font-family: reenie;
 }
 
 @keyframes fadeIn {

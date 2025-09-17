@@ -11,7 +11,7 @@ class Project{
     }
 
     removetodo(Todo){
-        this.todolist=this.todolist.filter(card=>card.id!=todo.id);
+        this.todolist=this.todolist.filter(card=>card.id!==Todo.id);
     }
 
     toJSON() {

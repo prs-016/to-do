@@ -1,5 +1,5 @@
 import "./styles.css";
-import UI from "./UI.js";
+import UI from "./pages.js/UI.js";
 document.addEventListener("DOMContentLoaded", () => {
   UI();
 });
