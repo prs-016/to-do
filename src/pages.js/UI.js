@@ -7,7 +7,6 @@ function UI(){
     const projects = loadProjects() || [new Project({ name: "Gym" })];
     let activeProject = projects[0];
     let activeTodo = null;
-
     const add = document.querySelector(".add");
     const modal = document.querySelector(".modal");
     const modal2 = document.querySelector(".modal2"); 
@@ -127,22 +126,24 @@ function UI(){
                 }, { once: false });
             });
             const form2 = modal3.querySelector(".form2");
-            if (form2) {
-                form2.addEventListener('submit', function(event)  {
+            if (form2){
+                form2.onsubmit = function(event) {
                     event.preventDefault(); 
-                    activeTodo.update({
-                        title: title.value, 
-                        description: description.value, 
-                        date: date.value, 
-                        priority: document.querySelector(".modal3 .priority button.selected")?.textContent.toLowerCase(), 
-                        checked: checked.checked
-                    });
-                    saveProjects(projects); 
-                    renderTodos(project);
+                    if (activeTodo) {
+                        activeTodo.update({
+                            title: title.value, 
+                            description: description.value, 
+                            date: date.value, 
+                            priority: document.querySelector(".modal3 .priority button.selected")?.textContent.toLowerCase(), 
+                            checked: checked.checked
+                        });
+                        saveProjects(projects); 
+                        renderTodos(project);
+                    }
                     modal3.style.display = "none";
                     activeTodo = null;
                     form2.reset();
-                });
+                };
             }
         });
 
@@ -175,24 +176,19 @@ function UI(){
 
     const form = modal.querySelector(".form");
     if (form) {
-         const buttons = modal.querySelectorAll(".priority button");
-            buttons.forEach((b) => b.classList.remove("selected"));
-            const current = modal.querySelector(`.priority .${todo.priority}`);
-            if (current) current.classList.add("selected");
-            console.log("clicked outside!");
-            buttons.forEach((button) => {
-                button.addEventListener("click", () => {
-                    console.log("clicked inside!");
-                    buttons.forEach((b) => b.classList.remove("selected"));
-                    button.classList.add("selected");
-                }, { once: false });
+        const buttons = modal.querySelectorAll(".priority button");
+        buttons.forEach((button) => {
+            button.addEventListener("click", () => {
+                buttons.forEach((b) => b.classList.remove("selected"));
+                button.classList.add("selected");
             });
+        });
         form.addEventListener('submit', function(event) {
             event.preventDefault(); 
-            const title = modal.getElementById('title').value;
-            const description = modal.getElementById('description').value;
-            const date = modal.getElementById('todo-date').value;
-            const checked = modal.getElementById("checkbox").checked;
+            const title = modal.querySelector('#title').value;
+            const description = modal.querySelector('#description').value;
+            const date = modal.querySelector('#todo-date').value;
+            const checked = modal.querySelector("#checkbox").checked;
             const selectedPriority = form.querySelector(".priority button.selected");
             const priority = selectedPriority ? selectedPriority.textContent.toLowerCase() : "low"; 
 
@@ -204,7 +200,130 @@ function UI(){
             modal.style.display = "none";
             form.reset();
         });
+
+
+        const addTodoBtn = document.querySelector(".addTodo");
+        const addProjectBtn = document.querySelector(".addProject");
+        const addNoteBtn = document.querySelector(".addNote");
+        const allAddButtons = [addTodoBtn, addProjectBtn, addNoteBtn];
+        const todoFormHTML = `
+        <form action="" method="" class="form">
+        <div class="container">
+            <label for="title">
+            <div class="text">Task Title:</div>
+            <input type="text" placeholder="Title: Pay Bills" id="title" pattern=".*\\S.*" maxlength="20" required>
+            </label>
+        </div>
+        <div class="container">
+            <label for="description">
+            <div class="text">Description:</div>
+            <textarea placeholder="Description: Rent & Utilities" id="description" pattern=".*\\S.*" required rows="4" cols="50"></textarea>
+            </label>
+        </div>
+        <div class="container">
+            <label for="todo-date">
+            <div class="text">Date and Time:</div>
+            <input type="text" id="todo-date" placeholder="Select date and time" required>
+            </label>
+        </div>
+        <div class="container">
+            <label for="checkbox">
+            <div class="text">Done?</div>
+            <input type="checkbox" id="checkbox" value="no">
+            </label>
+        </div>
+        <div class="priority">
+            <div class="text">Priority:</div>
+            <button type="button" class="high selected">High</button>
+            <button type="button" class="medium">Medium</button>
+            <button type="button" class="low">Low</button>
+        </div>
+        <div class="btn">
+            <button class="submit-btn" type="submit">Create New TO-DO</button>
+        </div>
+        </form>
+        `;
+
+        const projectFormHTML = `
+        <form action="" method="" class="form-project">
+                    <div class="container">
+                        <label for="title">
+                            <div class="text">Project Title:</div>
+                            <input type="text" placeholder="Title: Pay Bills"  id="title"  pattern = ".*\S.*" maxlength="20" required="required">
+                        </label>
+                        <div class="btn">
+                        <button class="submit-btn" type="submit">Create New TO-DO</button>
+                    </div> 
+                    </div>
+                </form>
+        `;
+
+
+
+        function selectButton(selectedBtn) {
+            allAddButtons.forEach((btn) => btn.classList.remove("selected"));
+            selectedBtn.classList.add("selected");
+            if(selectedBtn==addTodoBtn){
+                const cont=document.querySelector(".modal .cont");
+                cont.querySelectorAll("form").forEach(f => f.remove());
+                cont.removeChild(form);
+                cont.insertAdjacentHTML("beforeend", todoFormHTML);
+                form.addEventListener('submit', function(event) {
+                    event.preventDefault(); 
+                    const title = modal.querySelector('#title').value;
+                    const description = modal.querySelector('#description').value;
+                    const date = modal.querySelector('#todo-date').value;
+                    const checked = modal.querySelector("#checkbox").checked;
+                    const selectedPriority = form.querySelector(".priority button.selected");
+                    const priority = selectedPriority ? selectedPriority.textContent.toLowerCase() : "low"; 
+
+                    const todo = new Todo({ title, description, date, priority, checked }); 
+                        activeProject.addtodo(todo); 
+                        renderTodos(activeProject);
+                        saveProjects(projects);
+
+                    modal.style.display = "none";
+                    form.reset();
+                });
+            }
+
+            else if(selectedBtn==addProjectBtn){
+                const cont=document.querySelector(".modal .cont");
+                cont.querySelectorAll("form").forEach(f => f.remove());
+                cont.removeChild(form);
+                cont.insertAdjacentHTML("beforeend", projectFormHTML);
+                form.addEventListener('submit', function(event) {
+                    event.preventDefault();
+                    const name =modal.querySelector("#title").value;
+                    const newproject =new Project({name});
+                    projects.push(newproject);
+                    activeProject=newproject;
+                    const list = document.querySelector("Project");
+                    const container = document.createElement("div");
+                    list.appendChild(container);
+                    container.classList.add("container");
+                    const btn = document.createElement("button");
+                    container.appendChild(btn);
+                    btn.textContent=newproject.name;
+                    btn.classList.add(`${newproject.name}`);
+                    const num = document.createElement("div");
+                    container.appendChild(num);
+                    num.textContent=0;
+                    num.classList.add("num");
+                    renderTodos(activeProject);
+                    saveProjects(projects);
+                });
+            }
+        }
+
+        allAddButtons.forEach((btn) => {
+          btn.addEventListener("click", () => selectButton(btn));
+        });
+
     }
+
+
+
     if (activeProject){
         renderTodos(activeProject); 
     } 

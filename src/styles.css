@@ -482,13 +482,13 @@ body.dark{
     transform: scale(1.05) translateY(-10px);
 }
 
-.form .container, .form2 .container{
+.form .container, .form2 .container, .form-project .container{
   display: flex;
   flex-direction: column;
   gap: 0.3rem;
 }
 
-.form .text, .form2 .text {
+.form .text, .form2 .text, .form-project .text {
   font-size: 2rem;
   font-weight: 600;
   color: #333;
@@ -515,6 +515,7 @@ body.dark{
 .form input[type="datetime-local"],
 .form2 input[type="text"],
 .form2 input[type="datetime-local"],
+.form-project input[type="text"],
 #todo-date {
   padding: 0.6rem;
   border: 1px solid #ccc;
@@ -523,7 +524,7 @@ body.dark{
   font-size: 0.95rem;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
-.form input:focus, .form2 input:focus {
+.form input:focus, .form2 input:focus, .form-project input:focus {
   border-color: #007bff;
   box-shadow: 0 0 4px rgba(0,123,255,0.4);
 }
