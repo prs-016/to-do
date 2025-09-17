@@ -4,7 +4,17 @@ import { saveProjects, loadProjects } from "./storage.js";
 
 
 function UI(){
-    const projects = loadProjects() || [new Project({ name: "Gym" })];
+    console.log("1");
+    let projects = loadProjects();
+    if (!projects || projects.length === 0) {
+        projects = [
+            new Project({ name: "Gym" }),
+            new Project({ name: "Study" }),
+            new Project({ name: "Work" })
+        ];
+        saveProjects(projects);
+    }
+    console.log("12");
     let activeProject = projects[0];
     let activeTodo = null;
     const add = document.querySelector(".add");
@@ -15,12 +25,12 @@ function UI(){
     add.addEventListener("click",()=>{
         modal.style.display="flex";
     })
-
+console.log("123");
     function renderTodos(project) { 
         right.innerHTML = ""; 
         project.todolist.forEach((td) => addCard(td, project)); 
     }
-
+console.log("1231");
     function formatDisplayDate(dateString) {
         if (!dateString) return "";
         
@@ -36,7 +46,7 @@ function UI(){
         };
         return date.toLocaleDateString('en-US', options);
     }
-
+console.log("12312");
     function formatInputDate(dateString) {
         if (!dateString) return "";
         
@@ -81,7 +91,7 @@ function UI(){
         card.appendChild(detailsBtn);
         card.appendChild(editBtn);
         card.appendChild(deleteBtn);
-
+        console.log("123123");
         detailsBtn.addEventListener("click",()=>{
             modal2.style.display = "flex";
             const closed = document.querySelector(".closeBtn");
@@ -182,6 +192,7 @@ function UI(){
                 buttons.forEach((b) => b.classList.remove("selected"));
                 button.classList.add("selected");
             });
+            console.log("4231");
         });
         form.addEventListener('submit', function(event) {
             event.preventDefault(); 
@@ -201,7 +212,7 @@ function UI(){
             form.reset();
         });
 
-
+        console.log("aaaaaa");
         const addTodoBtn = document.querySelector(".addTodo");
         const addProjectBtn = document.querySelector(".addProject");
         const addNoteBtn = document.querySelector(".addNote");
@@ -249,7 +260,7 @@ function UI(){
                     <div class="container">
                         <label for="title">
                             <div class="text">Project Title:</div>
-                            <input type="text" placeholder="Title: Pay Bills"  id="title"  pattern = ".*\S.*" maxlength="20" required="required">
+                            <input type="text" placeholder="Project Title: Gym"  id="title"  pattern=".*\\S.*" maxlength="20" required="required">
                         </label>
                         <div class="btn">
                         <button class="submit-btn" type="submit">Create New TO-DO</button>
@@ -263,11 +274,20 @@ function UI(){
         function selectButton(selectedBtn) {
             allAddButtons.forEach((btn) => btn.classList.remove("selected"));
             selectedBtn.classList.add("selected");
+
+            const cont = document.querySelector(".modal .cont");
+            cont.querySelectorAll("form").forEach(f => f.remove());
+
             if(selectedBtn==addTodoBtn){
-                const cont=document.querySelector(".modal .cont");
-                cont.querySelectorAll("form").forEach(f => f.remove());
-                cont.removeChild(form);
                 cont.insertAdjacentHTML("beforeend", todoFormHTML);
+                const form = cont.querySelector("form");
+                const priorityBtns = form.querySelectorAll(".priority button");
+                priorityBtns.forEach((btn) => {
+                    btn.onclick = () => {
+                        priorityBtns.forEach((b) => b.classList.remove("selected"));
+                        btn.classList.add("selected");
+                    };
+                });
                 form.addEventListener('submit', function(event) {
                     event.preventDefault(); 
                     const title = modal.querySelector('#title').value;
@@ -288,17 +308,27 @@ function UI(){
             }
 
             else if(selectedBtn==addProjectBtn){
-                const cont=document.querySelector(".modal .cont");
-                cont.querySelectorAll("form").forEach(f => f.remove());
-                cont.removeChild(form);
                 cont.insertAdjacentHTML("beforeend", projectFormHTML);
+                const form = cont.querySelector("form");
                 form.addEventListener('submit', function(event) {
                     event.preventDefault();
-                    const name =modal.querySelector("#title").value;
+                    const nameInput = form.querySelector("#title");
+                    const name =nameInput.value.trim();
+                    nameInput.setCustomValidity("");
+
+                    if (projects.some(p => p.name.toLowerCase() === name.toLowerCase())) {
+                        nameInput.setCustomValidity("Project name already taken.");
+                        nameInput.reportValidity();
+                        return;
+                    }
+                    else{
+                        nameInput.setCustomValidity("");
+                    }
+        
                     const newproject =new Project({name});
                     projects.push(newproject);
                     activeProject=newproject;
-                    const list = document.querySelector("Project");
+                    const list = document.querySelector(".Project");
                     const container = document.createElement("div");
                     list.appendChild(container);
                     container.classList.add("container");
@@ -312,10 +342,12 @@ function UI(){
                     num.classList.add("num");
                     renderTodos(activeProject);
                     saveProjects(projects);
+                    modal.style.display = "none";
+                    form.reset();
                 });
             }
         }
-
+        console.log("1234");
         allAddButtons.forEach((btn) => {
           btn.addEventListener("click", () => selectButton(btn));
         });
@@ -323,6 +355,31 @@ function UI(){
     }
 
 
+   
+
+    const projectBtns = document.querySelectorAll(".Project .container button");
+    console.log("Hello");
+    projectBtns.forEach((btn) => {
+    btn.addEventListener("click", () => {
+        console.log(btn+" selected");
+        // Remove 'selected' class from all containers
+        document.querySelectorAll(".Project .container").forEach((container) => {
+            container.classList.remove("selected");
+        });
+
+        // Add 'selected' class to the clicked button's parent container
+        btn.parentElement.classList.add("selected");
+        console.log("should be updated"+btn);
+
+        // Update activeProject based on the clicked button
+        const projectName = btn.textContent.trim();
+        activeProject = projects.find((project) => project.name === projectName);
+
+        // Render todos for the selected project
+        renderTodos(activeProject);
+        saveProjects(projects);
+    });
+});
 
     if (activeProject){
         renderTodos(activeProject); 
@@ -333,3 +390,4 @@ function UI(){
 }
 
 export default UI;
+
