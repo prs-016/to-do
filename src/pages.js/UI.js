@@ -1,36 +1,46 @@
 import Project from "./models/project.js";
 import Todo from "./models/todo.js";
-
+import { saveProjects, loadProjects } from "./storage.js";
 
 
 function UI(){
-    const Gym = new Project({name:"Gym"});
+    const projects = loadProjects() || [new Project({ name: "Gym" })];
+    let activeProject = projects[0];
     const add = document.querySelector(".add");
     const modal = document.querySelector(".modal");
+    const modal2 = document.querySelector(".modal2"); 
+    const modal3 = document.querySelector(".modal3");
+    const right = document.querySelector(".right");
     add.addEventListener("click",()=>{
         modal.style.display="flex";
     })
 
+    function renderTodos(project) { 
+        right.innerHTML = ""; 
+        project.todolist.forEach((td) => addCard(td, project)); 
+    }
 
-    function addCard(Todo){
-        const right = document.querySelector(".right");
+    function addCard(todo, project){
+        if (!(todo instanceof Todo)) {
+            todo = Todo.fromJSON(todo);
+        }
         const card = document.createElement("div");
         right.appendChild(card);
-        card.classList.add("card", "high");
-        Todo.checked?card.classList.add("checked"):Todo.classList.remove("checked");
+        card.classList.add("card", todo.priority || "high");
+        todo.checked?card.classList.add("checked"):card.classList.remove("checked");
         const checkbox = document.createElement("input");
         checkbox.type = "checkbox";
-        checkbox.id = "checkbox";
-        checkbox.value = Todo.checked;
+        checkbox.id = `checkbox-${todo.id}`;
+        checkbox.checked = !!todo.checked;
         const textDiv = document.createElement("div");
         textDiv.classList.add("text");
-        textDiv.textContent = Todo.title;
+        textDiv.textContent = todo.title;
         const dateDiv = document.createElement("div");
         dateDiv.classList.add("date");
-        dateDiv.textContent = Todo.date;  //need to splice and change this
+        dateDiv.textContent = todo.date||"";  //need to splice and change this
         const timeDiv = document.createElement("div");
         timeDiv.classList.add("time");
-        timeDiv.textContent = "9:00";     //need to change this
+        timeDiv.textContent = todo.timePart || "";     //need to change this
         const detailsBtn = document.createElement("button");
         detailsBtn.classList.add("details");
         detailsBtn.textContent = "details";
@@ -49,57 +59,65 @@ function UI(){
         card.appendChild(deleteBtn);
 
         detailsBtn.addEventListener("click",()=>{
-            modal2.style.display="flex";
-            document.querySelector(".title-text").textContent=Todo.title;
-            document.querySelector(".project").textContent="Gym";//need to change this
-            document.querySelector(".description").textContent=Todo.description;
-            document.querySelector(".date").textContent=Todo.date;
-            document.querySelector(".priority").textContent=Todo.priority;
+            modal2.style.display = "flex";
+            document.querySelector(".title-text").textContent=todo.title;
+            document.querySelector(".project").textContent = activeProject.name;//need to change this
+            document.querySelector(".description").textContent=todo.description;
+            document.querySelector(".date").textContent=todo.date;
+            document.querySelector(".priority").textContent=todo.priority;
         });
 
         editBtn.addEventListener("click",()=>{
-            modal3.style.display="flex";
+            modal3.style.display = "flex";
             const title = document.querySelector(".modal3 .cont .container label input#title");
-            title.value=Todo.title;
-            title.placeholder=Todo.title;
-            const description= document.querySelector(".modal3 .cont .container label input#description");
-            description.value=Todo.description;
-            description.placeholder=Todo.description;
+            title.value=todo.title;
+            title.placeholder=todo.title;
+            const description= document.querySelector(".modal3 #description");
+            description.value=todo.description;
+            description.placeholder=todo.description;
             const date = document.querySelector(".modal3 .cont .container label input#todo-date");
-            date.value=Todo.date;
-            date.placeholder=Todo.date;
+            date.value=todo.date;
+            date.placeholder=todo.date;
             const checked=document.querySelector(".modal3 .cont .container label input#checkbox");
-            checked.value=Todo.checked;
-            checked.placeholder=Todo.checked;
-            const buttons = document.querySelectorAll(".modal3 .cont .priority button");
-            const priorityInput = document.getElementById("priority");
-            buttons.forEach(button => {
-                button.addEventListener("click", () => {
-                buttons.forEach(btn => btn.classList.remove("selected"));
-                button.classList.add("selected");
-                priorityInput.value = button.textContent.toLowerCase();
-                });
+            checked.value=!!todo.checked;
+            checked.placeholder=todo.checked;
+            const buttons = document.querySelectorAll(".modal3 .priority button");
+            buttons.forEach((button) => {
+                button.onclick = () => {
+                    buttons.forEach((b) => b.classList.remove("selected"));
+                    button.classList.add("selected");
+                };
             });
-            const form2 = modal.querySelector(".form2");
+            const form2 = modal3.querySelector(".form2");
             if (form2) {
-                form2.addEventListener('submit', function(event) {
+                form2.onsubmit = function (event) {
                     event.preventDefault(); 
                     modal3.style.display = "none";
                     form2.reset();
-                    Todo.update({title: this.title, description: this.description, date: this.date, priority: this.priorityInput, checked: this.checked});
-                });
+                    todo.update({
+                        title: title.value, 
+                        description: description.value, 
+                        date: date.value, 
+                        priority: document.querySelector(".modal3 .priority button.selected")?.textContent.toLowerCase(), 
+                        checked: checked.checked
+                    });
+                    saveProjects(projects); 
+                    renderTodos(project);
+                };
             }
         });
 
 
         deleteBtn.addEventListener("click",()=>{
-            Gym.removetodo(Todo);
-            right.removeChild(card);
+            project.removeTodo(todo);
+            renderTodos(project); 
+            saveProjects(projects); 
         })
 
         checkbox.addEventListener("change", ()=>{
-            Todo.toggleChecked();
+            todo.toggleChecked();
             card.classList.toggle("checked");
+            saveProjects(projects);
         })
     }
 
@@ -110,44 +128,45 @@ function UI(){
             modal2.style.display = "none";
         }
     }
-    window.onclick = function(event) {
-        if (event.target == modal2) {
-            modal2.style.display = "none";
-        }
-    }
-
-    window.onclick = function(event) {
+    window.onclick = function (event) {
         if (event.target == modal) {
             modal.style.display = "none";
         }
-    }
+        if (event.target == modal2) {
+            modal2.style.display = "none";
+        }
+        if (event.target == modal3) { 
+            modal3.style.display = "none";
+        }
+    };
+
 
     const form = modal.querySelector(".form");
     if (form) {
-    form.addEventListener('submit', function(event) {
-        event.preventDefault(); 
-        const title = document.getElementById('title').value;
-        const description = document.getElementById('description').value;
-        const date = document.getElementById('todo-date').value;
-        const done = document.getElementById('checkbox').checked;
-        const buttons = document.querySelectorAll(".priority button");
-        const priorityInput = document.getElementById("priority");
-        buttons.forEach(button => {
-            button.addEventListener("click", () => {
-            buttons.forEach(btn => btn.classList.remove("selected"));
-            button.classList.add("selected");
-            priorityInput.value = button.textContent.toLowerCase();
-            });
+        form.addEventListener('submit', function(event) {
+            event.preventDefault(); 
+            const title = document.getElementById('title').value;
+            const description = document.getElementById('description').value;
+            const date = document.getElementById('todo-date').value;
+            const checked = document.getElementById("checkbox").checked;
+            const selectedPriority = form.querySelector(".priority button.selected");
+            const priority = selectedPriority ? selectedPriority.textContent.toLowerCase() : "low"; 
+
+            const todo = new Todo({ title, description, date, priority, checked }); 
+                activeProject.addTodo(todo); 
+                renderTodos(activeProject);
+                saveProjects(projects);
+
+            modal.style.display = "none";
+            form.reset();
         });
+    }
+    if (activeProject){
+        renderTodos(activeProject); 
+    } 
 
-        Gym.addtodo({title: title, description:description, date: date, priority: priorityInput, checked: checked});
-        addCard({title: title, description:description, date: date, priority: priorityInput, checked: checked});
-
-        modal.style.display = "none";
-        form.reset();
-    });
-}
-
+    const copytext=document.querySelector(".copytext");
+    copytext.innerHTML = `Copyright <span>&#169;</span> Prakhar_Shah ${new Date().getFullYear()} @`;
 }
 
 export default UI;

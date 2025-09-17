@@ -22,9 +22,10 @@ class Project{
     }
 
     static fromJSON(obj) {
-        const project = new Project(obj.name);
-        project.todolist = obj.todolist.map(todoData => Todo.fromJSON(todoData));
-        return project;
+        return new Project({
+            name: obj.name,
+            todolist: obj.todolist.map(t => Todo.fromJSON(t))
+        });
     }
 }
 

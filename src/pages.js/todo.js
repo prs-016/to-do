@@ -21,6 +21,13 @@ class Todo{
         Object.assign(this, fields);
     }
 
+    get datePart() {
+        return this.date ? this.date.split("T")[0] : "";
+    }
+    get timePart() {
+        return this.date ? this.date.split("T")[1] : "";
+    }
+
     toJSON() {
         return {
         id: this.id,
